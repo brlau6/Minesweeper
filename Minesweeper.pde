@@ -19,8 +19,6 @@ void setup ()
       buttons[r][c] = new MSButton(r, c);
     }
   }
-  buttons[1][2].mousePressed();
-
   setMines();
 }
 public void setMines()
@@ -112,21 +110,21 @@ public class MSButton
     } else if (countMines(myRow, myCol) > 0) {
       myLabel = countMines(myRow, myCol)+""; // +"" converts int to string
     } else {
-      if (isValid(myRow, myCol+1) && clicked == false)
+      if (isValid(myRow, myCol+1) && buttons[myRow][myCol+1].clicked == false)
         buttons[myRow][myCol+1].mousePressed();
-      if (isValid(myRow+1, myCol+1) && clicked == false)
+      if (isValid(myRow+1, myCol+1) && buttons[myRow+1][myCol+1].clicked == false)
         buttons[myRow+1][myCol+1].mousePressed();
-      if (isValid(myRow+1, myCol) && clicked == false)
+      if (isValid(myRow+1, myCol) && buttons[myRow+1][myCol].clicked == false)
         buttons[myRow+1][myCol].mousePressed();
-      if (isValid(myRow+1, myCol-1) && clicked == false)
+      if (isValid(myRow+1, myCol-1) && buttons[myRow+1][myCol-1].clicked == false)
         buttons[myRow+1][myCol-1].mousePressed();
-      if (isValid(myRow, myCol-1) && clicked == false)
+      if (isValid(myRow, myCol-1) && buttons[myRow][myCol-1].clicked == false)
         buttons[myRow][myCol-1].mousePressed();
-      if (isValid(myRow-1, myCol-1) && clicked == false)
+      if (isValid(myRow-1, myCol-1) && buttons[myRow-1][myCol-1].clicked == false)
         buttons[myRow-1][myCol-1].mousePressed();
-      if (isValid(myRow-1, myCol) && clicked == false)
+      if (isValid(myRow-1, myCol) && buttons[myRow-1][myCol].clicked == false)
         buttons[myRow-1][myCol].mousePressed();
-      if (isValid(myRow-1, myCol+1) && clicked == false)
+      if (isValid(myRow-1, myCol+1) && buttons[myRow-1][myCol+1].clicked == false)
         buttons[myRow-1][myCol+1].mousePressed();
     }
   }
