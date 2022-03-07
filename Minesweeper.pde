@@ -184,6 +184,7 @@ public class MSButton
     noStroke();
     textSize(15);
     if (flagged) {
+      fill(0,0,0);
       myColor = color(255,0,0);
       //myLabel = "   |>\n|";
     } else if ( clicked && mines.contains(this) ) { 
