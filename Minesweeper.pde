@@ -180,20 +180,15 @@ public class MSButton
   }
   public void draw () 
   {    
+    int myColor = color(255,255,255,0); //transparent
     noStroke();
     textSize(15);
     if (flagged) {
-      fill(255, 172, 18);
+      myColor = color(255,0,0);
       //myLabel = "   |>\n|";
     } else if ( clicked && mines.contains(this) ) { 
       fill(255, 0, 0);
     } else if (clicked) {
-      //if(flagged == false)
-      //if (countMines(myRow, myCol) > 0) {
-      //  myLabel = countMines(myRow, myCol)+"";
-      //} else {
-      //  myLabel = "";
-      //}
       if (y%(height*2) == 0) { //brown checkered bg
         if (x%(width*2) == 0)
           fill(237, 198, 147);
@@ -220,7 +215,13 @@ public class MSButton
     }
     rect(x, y, width, height);
     fill(0);
-    text(myLabel, x+width/2, y+height/2); //measurements /2 to center text
+    text(myLabel, x+width/2, y+height/2);//measurements /2 to center text
+    //flag
+    fill(myColor);
+    triangle(x+(width/3.0), y+(height/3.0), x+(width*(3/4.0)), y+(height/2.0), x+(width/3.0), y+(height*(2/3.0)));
+    stroke(myColor);
+    strokeWeight(2);
+    line(x+(width/3.0), y+(height/3.0), x+(width/3.0), y+height);
   }
   public void setLabel(String newLabel)
   {
