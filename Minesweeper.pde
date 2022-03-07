@@ -1,8 +1,8 @@
 import de.bezier.guido.*;
 private static final int NUM_ROWS = 10;
 private static final int NUM_COLS = 10;
-private static final int displayWidth = 800;
-private static final int displayHeight = 800;
+private static final int displayWidth = 600;
+private static final int displayHeight = 600;
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> mines = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
 
@@ -21,12 +21,16 @@ void setup ()
       buttons[r][c] = new MSButton(r, c);
     }
   }
-  setMines(5);
+  setMines((NUM_ROWS*NUM_COLS)/7);
   //removeMines();
+  /*
+  setMines(x); --> x will be determined by area of grid; use Google Minesweeper difficulty equation
+   after 30 seconds (bind to key 3) removeMines() and call setMines(5) again
+   */
 }
-public void setMines(int count)
+public void setMines(int amount)
 {
-  if (count == 1) {
+  if (amount == 1) {
     int randR = (int)(Math.random()*NUM_ROWS);
     int randC = (int)(Math.random()*NUM_COLS);
     if (!mines.contains(buttons[randR][randC])) {
@@ -35,24 +39,29 @@ public void setMines(int count)
   } else {
     int randR = (int)(Math.random()*NUM_ROWS);
     int randC = (int)(Math.random()*NUM_COLS);
-    if (!mines.contains(buttons[randR][randC])) {
-      mines.add(buttons[randR][randC]);
+    
+    //while a button is already contained in mines
+    //reset randR and randC until it's not contained in mines
+    //then add the new button into mines
+    while(mines.contains(buttons[randR][randC])){
+      randR = (int)(Math.random()*NUM_ROWS);
+      randC = (int)(Math.random()*NUM_COLS);
     }
-    setMines(count-1);
+    mines.add(buttons[randR][randC]);
+    setMines(amount-1);
   }
 }
-
-public void removeMines()
+public void removeMines() //removes all mines from game
 {
-  if (mines.size()>0)
+  while (mines.size()>0)
     mines.remove(0);
 }
-
 public void draw ()
 {
   background( 0 );
-  if (isWon() == true)
+  if (isWon() == true){
     displayWinningMessage();
+  }
 }
 public boolean isWon()
 {
@@ -61,7 +70,15 @@ public boolean isWon()
     if (mines.get(i).isFlagged() && mineCount > 0)
       mineCount--;
   }
-  if (mineCount == 0) //once all mines are flagged
+  int buttonCount = NUM_ROWS*NUM_COLS;
+  for(int r = 0; r < NUM_ROWS; r++){
+    for(int c = 0; c < NUM_COLS; c++){
+      if(buttons[r][c].clicked == true){
+        buttonCount--;
+      }
+    }
+  }
+  if (mineCount == 0 && buttonCount == 0) //once all mines are flagged
     return true;
   return false;
 }
@@ -69,17 +86,17 @@ public void displayLosingMessage()
 {
   for (int r = 0; r < NUM_ROWS; r++) { 
     for (int c = 0; c < NUM_COLS; c++) { 
-      buttons[r][c].setLabel("YOU LOSE!");
+      buttons[r][c].setLabel("FAIL :(");
       buttons[r][c].clicked = true;
       buttons[r][c].flagged = false;
     }
   }
-}
+}//end isWon()
 public void displayWinningMessage()
 {
   for (int r = 0; r < NUM_ROWS; r++) { 
     for (int c = 0; c < NUM_COLS; c++) {
-      buttons[r][c].setLabel("YOU WIN!");
+      buttons[r][c].setLabel("WIN :)");
       buttons[r][c].clicked = true;
       buttons[r][c].flagged = false;
     }
@@ -138,9 +155,9 @@ public class MSButton
     clicked = true;
     if (mouseButton == RIGHT) {
       flagged = !flagged;
-      if (flagged == false)
+      if (flagged == false) //if not flagged, button shouldn't
         clicked = false;
-    } else if (clicked && mines.contains(this)) {
+    } else if (mines.contains(this)) {
       displayLosingMessage();
     } else if (countMines(myRow, myCol) > 0) {
       myLabel = countMines(myRow, myCol)+""; // +"" converts int to string
@@ -166,25 +183,32 @@ public class MSButton
   public void draw () 
   {    
     noStroke();
+    textSize(15);
     if (flagged) {
-      fill(255, 255, 0);
-      myLabel = "|>";
+      fill(255, 172, 18);
+      //myLabel = "   |>\n|";
     } else if ( clicked && mines.contains(this) ) { 
       fill(255, 0, 0);
     } else if (clicked) {
-      if (y%(height*2) == 0) {
+      //if(flagged == false)
+      //if (countMines(myRow, myCol) > 0) {
+      //  myLabel = countMines(myRow, myCol)+"";
+      //} else {
+      //  myLabel = "";
+      //}
+      if (y%(height*2) == 0) { //brown checkered bg
         if (x%(width*2) == 0)
           fill(237, 198, 147);
         else
-          fill(201, 164, 115);
+          fill(222, 185, 138);
       } else {
         if (x%(width*2) == 0)
-          fill(201, 164, 115);
+          fill(222, 185, 138);
         else
           fill(237, 198, 147);
       }
     } else {
-      if (y%(height*2) == 0) {
+      if (y%(height*2) == 0) { //green checkered bg
         if (x%(width*2) == 0)
           fill(127, 224, 85);
         else
@@ -196,10 +220,9 @@ public class MSButton
           fill(127, 224, 85);
       }
     }
-
     rect(x, y, width, height);
     fill(0);
-    text(myLabel, x+width/2, y+height/2);
+    text(myLabel, x+width/2, y+height/2); //measurements /2 to center text
   }
   public void setLabel(String newLabel)
   {
