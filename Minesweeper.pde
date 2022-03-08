@@ -6,7 +6,7 @@ private ArrayList <MSButton> mines = new ArrayList <MSButton>(); //ArrayList of 
 
 void setup ()
 {
-  size(600,600);
+  size(600, 600);
   textAlign(CENTER, CENTER);
 
   // make the manager
@@ -37,11 +37,11 @@ public void setMines(int amount)
   } else {
     int randR = (int)(Math.random()*NUM_ROWS);
     int randC = (int)(Math.random()*NUM_COLS);
-    
+
     //while a button is already contained in mines
     //reset randR and randC until it's not contained in mines
     //then add the new button into mines
-    while(mines.contains(buttons[randR][randC])){
+    while (mines.contains(buttons[randR][randC])) {
       randR = (int)(Math.random()*NUM_ROWS);
       randC = (int)(Math.random()*NUM_COLS);
     }
@@ -57,7 +57,7 @@ public void removeMines() //removes all mines from game
 public void draw ()
 {
   background( 0 );
-  if (isWon() == true){
+  if (isWon() == true) {
     displayWinningMessage();
   }
 }
@@ -69,9 +69,9 @@ public boolean isWon()
       mineCount--;
   }
   int buttonCount = NUM_ROWS*NUM_COLS;
-  for(int r = 0; r < NUM_ROWS; r++){
-    for(int c = 0; c < NUM_COLS; c++){
-      if(buttons[r][c].clicked == true){
+  for (int r = 0; r < NUM_ROWS; r++) {
+    for (int c = 0; c < NUM_COLS; c++) {
+      if (buttons[r][c].clicked == true) {
         buttonCount--;
       }
     }
@@ -127,6 +127,19 @@ public int countMines(int row, int col)
     numMines++;
   return numMines;
 }
+public void keyPressed() { 
+  if (key == 'R' || key == 'r') {  //resets game when R is clicked
+    removeMines();
+    for(int r = 0; r < NUM_ROWS; r++){
+      for(int c = 0; c < NUM_COLS; c++){
+        buttons[r][c].clicked = false;
+        buttons[r][c].flagged = false;
+        buttons[r][c].setLabel("");
+      }
+    }
+    setMines((NUM_ROWS*NUM_COLS)/7);
+  }
+}
 public class MSButton
 {
   private int myRow, myCol;
@@ -180,12 +193,12 @@ public class MSButton
   }
   public void draw () 
   {    
-    int myColor = color(255,255,255,0); //transparent
+    int myColor = color(255, 255, 255, 0); //transparent
     noStroke();
     textSize(15);
     if (flagged) {
-      fill(0,0,0);
-      myColor = color(255,0,0);
+      fill(0, 0, 0);
+      myColor = color(255, 0, 0);
       //myLabel = "   |>\n|";
     } else if ( clicked && mines.contains(this) ) { 
       fill(255, 0, 0);
