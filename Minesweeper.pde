@@ -20,7 +20,6 @@ void setup ()
     }
   }
   setMines((NUM_ROWS*NUM_COLS)/7);
-  //removeMines();
   /*
   setMines(x); --> x will be determined by area of grid; use Google Minesweeper difficulty equation
    after 30 seconds (bind to key 3) removeMines() and call setMines(5) again
@@ -28,16 +27,17 @@ void setup ()
 }
 public void setMines(int amount)
 {
-  if (amount == 1) {
+  if (amount <= 1) {
     int randR = (int)(Math.random()*NUM_ROWS);
     int randC = (int)(Math.random()*NUM_COLS);
-    if (!mines.contains(buttons[randR][randC])) {
-      mines.add(buttons[randR][randC]);
+    while (mines.contains(buttons[randR][randC])) {
+      randR = (int)(Math.random()*NUM_ROWS);
+      randC = (int)(Math.random()*NUM_COLS);
     }
+    mines.add(buttons[randR][randC]);
   } else {
     int randR = (int)(Math.random()*NUM_ROWS);
     int randC = (int)(Math.random()*NUM_COLS);
-
     //while a button is already contained in mines
     //reset randR and randC until it's not contained in mines
     //then add the new button into mines
